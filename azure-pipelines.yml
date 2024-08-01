@@ -5,13 +5,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: Checkout@2
-  inputs:
-    repository: 'self'
+- checkout: self
 
 - script: |
     echo "Building the project..."
-    # Install Apache if needed (not typically required on GitHub Actions, but useful for local testing)
+    # Install Apache if needed
     sudo apt-get update
     sudo apt-get install -y apache2
     sudo systemctl start apache2
