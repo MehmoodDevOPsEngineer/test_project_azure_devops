@@ -1,0 +1,27 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Checkout@2
+  inputs:
+    repository: 'self'
+
+- script: |
+    echo "Building the project..."
+    # Install Apache if needed (not typically required on GitHub Actions, but useful for local testing)
+    sudo apt-get update
+    sudo apt-get install -y apache2
+    sudo systemctl start apache2
+    sudo systemctl enable apache2
+    # Deploy project files
+    sudo cp -r * /var/www/html/
+  displayName: 'Build and Deploy'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '/var/www/html'
+    artifactName: 'webapp'
+    publishLocation: 'Container'
